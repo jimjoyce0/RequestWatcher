@@ -1,0 +1,79 @@
+<project name="TomcatMonitor" default="compile" basedir=".">
+
+
+
+  <!-- set global properties for this build -->
+  <property name="src"     value="src"/>
+  <property name="classes" value="bin"/>
+  <property name="dist"    value="dist"/>
+  <property name="docs"    value="docs"/>
+  <property name="lib"    value="lib"/>  	
+	<property name="dest" value="E:\Users\dad\workspace\JConsolePlugins\dist"/>
+
+
+  <path id="classpath">
+    <pathelement path="c:\Program Files\Java\jdk1.8.0_151"/>
+    <fileset dir="lib/">
+       <include name="jconsole.jar"/>
+     </fileset>
+
+  </path>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the classes directory structure used by compile -->
+    <mkdir dir="${classes}"/>
+  </target>
+
+  <target name="compile" depends="init">
+    <!-- Compile the java code from ${src} into ${classes} -->
+
+    <javac srcdir="${src}" destdir="${classes}" verbose="false" source="1.7">
+      <classpath refid="classpath"/>
+    </javac>
+  </target>
+
+  <target name="dist" depends="compile">
+    <!-- Create the distribution directory -->
+    <mkdir dir="${dist}"/>
+
+
+ 
+    <!-- Make jar file. -->
+    <jar jarfile="${dist}/requestWatcher.jar" >
+    	<fileset dir="${classes}" >
+    		<include name="org/jj/plugin/jconsole/**" />
+    	</fileset>
+       	<fileset dir="${src}" >
+        	<include name="org/jj/plugin/jconsole/**" />
+        	<include name="META-INF/**" />
+        </fileset>
+    </jar>
+  	
+  	<copy todir="${dest}">
+  		<fileset dir="${dist}" >
+  			<include name="requestWatcher.jar" />
+  		</fileset>
+  	</copy>
+  	</target>
+
+  	
+
+
+
+
+  <target name="clean">
+    <!-- Delete the ${classes} and ${dist} directory trees -->
+    <delete includeEmptyDirs="true" failonerror="false">
+      <fileset dir="${classes}" includes="**"/>
+    </delete>
+    <delete includeEmptyDirs="true" failonerror="false">
+      <fileset dir="${dist}">
+        <exclude name=".cvsignore"/>
+        <include name="**"/>
+      </fileset>
+    </delete>
+  </target>
+  
+</project>
